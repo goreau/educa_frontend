@@ -14,7 +14,7 @@
             </button>
           </header>
           <div class="card-content">
-            <MyTable :tableData="dataTable" :columns="columns" :is-filtered="true"/>
+            <MyTable :tableData="dataTable" :columns="columns" :filtered="true"/>
           </div>
         </div>
         <div style="display: none;">
@@ -82,7 +82,7 @@ export default {
    // this.myspan.innerHTML='<p>teste</p>';;
 
       this.isLoading = true;
-      educacaoService.getEducacaos()
+      educacaoService.getEducacaos(this.id_user)
           .then((response) => {
               this.dataTable = response.data;
               this.isLoading = false;
@@ -94,12 +94,12 @@ export default {
 
       this.columns = [
           {title: 'Local', field: 'local', type: 'string'},
-          {title: 'Data', field: 'data', type: 'string'},
+          {title: 'Data', field: 'data', type: 'string', sorter:"date",},
           {title: 'Tipo', field: 'tipo', type: 'string'},
           {title: 'Programa', field: 'programa', type: 'string'},    
           {title: 'Atividade', field: 'atividade', type: 'string'}, 
           {title: 'Módulo', field: 'modulo', type: 'string'},    
-          {title: 'Criação', field: 'criacao', type: 'string'},
+          {title: 'Criação', field: 'criacao', type: 'string', sorter:"date",},
           {title: 'Ações',  
             formatter: (cell, formatterParrams) =>{
               const row = cell.getRow().getData();

@@ -72,6 +72,16 @@ const routes = [
     component: () => import('../views/educacao/DetalhesView.vue'),
   },
   {
+    path: '/reports/:id',
+    name: 'reports',
+    component: () => import( '../views/report/MainReportView.vue'),
+  },
+  {
+    path: '/report/:id',
+    name: 'report',
+    component: () => import( '../views/report/ReportView.vue'),
+  },
+  {
     path: '/home',
     name: 'home',
     component:  () => import(/* webpackChunkName: "about" */ '../views/general/HomeView.vue')

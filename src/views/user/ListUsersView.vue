@@ -14,7 +14,7 @@
             </button>
           </header>
           <div class="card-content">
-            <MyTable :tableData="dataTable" :columns="columns" :is-filtered="true"/>
+            <MyTable :tableData="dataTable" :columns="columns" :filtered="true"/>
           </div>
         </div>
         <div style="display: none;">
@@ -81,7 +81,7 @@ export default {
    // this.myspan.innerHTML='<p>teste</p>';;
 
       this.isLoading = true;
-      authService.list()
+      authService.list(this.id_user)
           .then((response) => {
               this.dataTable = response.data;
               this.isLoading = false;

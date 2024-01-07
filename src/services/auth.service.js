@@ -30,12 +30,12 @@ class AuthService {
       });
     }
 
-    list() {
+    list(id) {
      /* var headers = authHeader();
       headers['Content-Type'] = "application/json";
       var header = { headers: headers };*/
 
-      return axios.get("/users")
+      return axios.get(`/users/${id}`)
       .then(response => {
         return response.data;
       })

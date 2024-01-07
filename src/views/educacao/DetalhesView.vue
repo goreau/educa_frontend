@@ -42,7 +42,7 @@
               <div class="field">
                 <label class="label">Participantes</label>
                 <input type="number" class="input" placeholder="Qt Pessoas" v-model="educacao_det.participantes" />
-              </div>            
+              </div>
             </div>
           </div>
           <footer class="card-footer">
@@ -53,41 +53,52 @@
           <div class="card-content">
             <MyCleanTable :tableData="dataTable" :columns="columns" :vazio="'Nenhuma público cadastrado'" />
             <hr>
-              <fieldset class="fieldset">
-                <legend>Fotos</legend>
-                <div class="columns">
-                  <div class="column is-8 is-offset-2">
-                    <vue-multi-image-upload 
-                      @data-image="images" 
-                      :max="3" 
-                      :image-size="4e6"  
-                      :alert-timeout="3e3" 
-                      :accept="imageType"
-                      :preview="{ h:100,w:100 }"
-                      :resize="{ h:500,w:500, keepRatio:true}" 
-                      :data-reset="component" 
-                      :options="options"  
-                    />
-                  </div>
+            <fieldset class="fieldset" v-if="max > 0">
+              <legend>Carregar Fotos</legend>
+              <div class="columns">
+                <div class="column is-8 is-offset-2">
+                  <vue-multi-image-upload @data-image="images" :max=max :image-size="4e6" :alert-timeout="3e3"
+                    :accept="imageType" :preview="{ h: 100, w: 100 }" :resize="{ h: 500, w: 500, keepRatio: true }"
+                    :data-reset="component" :options="options" />
                 </div>
-                <div class="columns">
-                  <div class="column is-3 is-offset-2">
-                    <button class="button is-link submit-img is-fullwidth" @click="sendFotos">
-                      <span class="btico"><font-awesome-icon icon="fa-solid fa-check" /></span>
-                        Enviar Imagens
-                    </button>
-                    </div>
-                    <div class="column is-3 is-offset-2">
-                    <button class="button is-link cancel-img is-fullwidth" @click="cancel">
-                      <span class="btico"><font-awesome-icon icon="fa-solid fa-broom" /></span>
-                        Limpar Imagens
-                    </button>
-                  </div>
+              </div>
+              <div class="columns">
+                <div class="column is-3 is-offset-2">
+                  <button class="button is-link submit-img is-fullwidth" @click="sendFotos" :disabled="inputImages.length == 0">
+                    <span class="btico"><font-awesome-icon icon="fa-solid fa-check" /></span>
+                    Enviar Imagens
+                  </button>
                 </div>
-              </fieldset>
-              <br><br>
+                <div class="column is-3 is-offset-2">
+                  <button class="button is-link cancel-img is-fullwidth" @click="clear" :disabled="inputImages.length == 0">
+                    <span class="btico"><font-awesome-icon icon="fa-solid fa-broom" /></span>
+                    Limpar Imagens
+                  </button>
+                </div>
+              </div>
+            </fieldset>
+            <hr>
+            <fieldset class="fieldset" v-if="max < 3">
+              <legend>Fotos</legend>
+              <div class="columns">
+                <div class="column is-4">
+                  <button class="delete" @click="delFoto(0)"></button>
+                  <img :src=img[0] alt=".." width="200">
+                </div>
+                <div class="column is-4" v-if="max < 2">
+                  <button class="delete" @click="delFoto(1)"></button>
+                  <img :src=img[1] alt=".." width="200">
+                </div>
+                <div class="column is-4" v-if="max == 0">
+                  <button class="delete" @click="delFoto(2)"></button>
+                  <img :src=img[2] alt=".." width="200">
+                </div>
+              </div>
+            </fieldset>
+            <br><br>
           </div>
         </div>
+
         <div style="display: none;">
           <span class="icon is-small is-left" name="coisa">
             <font-awesome-icon icon="fa-solid fa-edit" />
@@ -143,19 +154,22 @@ export default {
         participantes: ''
       },
       options: {
-        max: 'Máximo',
+        max: 'Disponíveis: ',
         ready: 'Pronto',
         select: 'selecionado(s)',
       },
       v$: useValidate(),
-      component : {},
-      inputImages : [],
-      imageType : ['image/jpeg', 'image/png', 'image/gif'],
+      max: 3,
+      component: {},
+      inputImages: [],
+      imageType: ['image/jpeg', 'image/png', 'image/gif'],
       myspan: null,
       myspan2: null,
       dataTable: [],
       isLoading: false,
       columns: [],
+      fotos: [],
+      img: [],
       message: "",
       caption: "",
       type: "",
@@ -180,37 +194,38 @@ export default {
     };
   },
   methods: {
-    images(e){
+    images(e) {
       this.inputImages = e;
     },
-    sendFotos(){
-        // The way to append images to FormData.
-        let formData = new FormData();
-        this.inputImages.map(img => formData.append('images[]',img));
+    sendFotos() {
+      // The way to append images to FormData.
+      let formData = new FormData();
+      this.inputImages.map(img => formData.append('images[]', img));
+      formData.append('id_educacao', this.educacao_det.id_educacao);
 
-        educacaoService.postFotos(formData).then(
-            (response) => {
-              this.showMessage = true;
-              this.message = "Fotos enviadas com sucesso!!";
-              this.type = "success";
-              this.caption = "Atividade";
-              setTimeout(() => (this.showMessage = false), 3000);
-              this.setTableData();
-            },
-            (error) => {
-              this.message = error;
-              this.showMessage = true;
-              this.type = "alert";
-              this.caption = "atividade";
-              setTimeout(() => (this.showMessage = false), 3000);
-            }
-          )
-            .finally(() => {
-              document.getElementById('login').classList.remove('is-loading');
-            });
-      },
-    clear(){
-        this.component.clear = true;
+      educacaoService.postFotos(formData).then(
+        (response) => {
+          this.showMessage = true;
+          this.message = "Fotos enviadas com sucesso!!";
+          this.type = "success";
+          this.caption = "Atividade";
+          setTimeout(() => (this.showMessage = false), 3000);
+          this.setTableData();
+        },
+        (error) => {
+          this.message = error;
+          this.showMessage = true;
+          this.type = "alert";
+          this.caption = "atividade";
+          setTimeout(() => (this.showMessage = false), 3000);
+        }
+      )
+        .finally(() => {
+          document.getElementById('login').classList.remove('is-loading');
+        });
+    },
+    clear() {
+      this.component.clear = true;
     },
     edit(row) {
       this.educacao_det.id_educacao_det = row.id_educacao_det;
@@ -278,10 +293,41 @@ export default {
         setTimeout(() => (this.showMessage = false), 3000);
       }
     },
+    delFoto(idx){
+      educacaoService.delFoto(this.fotos[idx], this.educacao_det.id_educacao )
+          .then((response) => {
+            this.showMessage = true;
+            this.message = "Foto removida com sucesso!!";
+            this.type = "success";
+            this.caption = "Detalhamento";
+            setTimeout(() => (this.showMessage = false), 3000);
+            this.setTableData();
+          })
+          .catch((err) => {
+            console.log(err);
+          })
+    },
+    getFoto() {
+      this.fotos.forEach(element => {
+        educacaoService.getFoto(element)
+          .then((response) => {
+            this.img.push(URL.createObjectURL(response.data));
+          })
+          .catch((err) => {
+            console.log(err);
+          })
+      });
+    },
     setTableData() {
       educacaoService.getDets(this.educacao_det.id_educacao)
         .then((response) => {
           this.dataTable = response.data;
+          if (response.data[0].fotos) {
+            this.fotos = response.data[0].fotos;
+            this.getFoto();
+          }
+
+          this.max = 3 - this.fotos.length;
           this.isLoading = false;
         })
         .catch((err) => {
@@ -356,25 +402,25 @@ export default {
 
 <style scoped>
 .fieldset {
-    background-color: #fff;
-    border-radius: 6px;
-    box-shadow: 0 0.5em 1em -0.125em rgba(10, 10, 10, .1), 0 0 0 1px rgba(10, 10, 10, .02);
-    color: #4a4a4a;
-    display: block;
-    padding: 1.25rem;
-    border: 1px solid #ccc;
-    margin-bottom: 1rem;
+  background-color: #fff;
+  border-radius: 6px;
+  box-shadow: 0 0.5em 1em -0.125em rgba(10, 10, 10, .1), 0 0 0 1px rgba(10, 10, 10, .02);
+  color: #4a4a4a;
+  display: block;
+  padding: 1.25rem;
+  border: 1px solid #ccc;
+  margin-bottom: 1rem;
 }
 
 .fieldset>legend {
-    color: #363636;
-    display: block;
-    font-size: 1rem;
-    font-weight: 700;
-    background-color: #fff;
-    padding: 0 5px;
-    width: max-content;
-    border: 0 none
+  color: #363636;
+  display: block;
+  font-size: 1rem;
+  font-weight: 700;
+  background-color: #fff;
+  padding: 0 5px;
+  width: max-content;
+  border: 0 none
 }
 
 .submit-img {

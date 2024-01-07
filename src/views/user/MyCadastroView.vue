@@ -32,7 +32,7 @@
                 </div>
               </div>
               <div class="field">
-                <label class="label">Municipio</label>
+                <label class="label">{{strLocal}}</label>
                 <div class="control">
                   <input
                     class="input"
@@ -55,7 +55,7 @@
                     />
                     Administrador
                   </label>
-                  <label class="radio" v-if="user.role==2">
+                  <label class="radio" v-if="user.role==9">
                     <input
                       type="radio"
                       nome="role"
@@ -63,6 +63,15 @@
                       checked="checked"
                     />
                     Gestor Regional
+                  </label>
+                  <label class="radio" v-if="user.role==2">
+                    <input
+                      type="radio"
+                      nome="role"
+                      value="2"
+                      checked="checked"
+                    />
+                    Gestor Local
                   </label>
                   <label class="radio"  v-if="user.role==3">
                     <input
@@ -188,6 +197,7 @@ export default {
       message: "",
       caption: "",
       type: "",
+      strLocal: "Município",
       showMessage: false,
       cFooter:{
           strSubmit:'Entrar',
@@ -266,6 +276,7 @@ export default {
           this.user.role = data.nivel;
           this.user.password = data.password;
           this.user.username = data.username;
+          this.strLocal = (data.nivel == 3 ? 'Município' : (data.nivel == 2 ? 'GVE' : (data.nivel == 1 ? 'Local' : 'Regional')));
         },
         (error) => {
           this.message = error.data;

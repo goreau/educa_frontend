@@ -39,7 +39,7 @@
                       type="radio"
                       name="role"
                       value="1"
-                      v-model="user.nivel"
+                      v-model="role"
                       :disabled="currentUser.nivel > 1"
                     />
                     Administrador
@@ -48,9 +48,9 @@
                     <input
                       type="radio"
                       name="role"
-                      value="2"
-                      v-model="user.nivel"
-                      :disabled="currentUser.nivel > 2"
+                      value="9"
+                      v-model="role"
+                      :disabled="currentUser.nivel == 2 || currentUser.nivel == 3"
                     />
                     Gestor Regional
                   </label>
@@ -58,8 +58,18 @@
                     <input
                       type="radio"
                       name="role"
+                      value="2"
+                      v-model="role"
+                      :disabled="currentUser.nivel == 3"
+                    />
+                    Gestor Local
+                  </label>
+                  <label class="radio">
+                    <input
+                      type="radio"
+                      name="role"
                       value="3"
-                      v-model="user.nivel"
+                      v-model="role"
                     />
                     Usuário Município
                   </label>
@@ -69,7 +79,7 @@
                 </span>
               </div>
               <div class="field">
-                <label class="label">Local</label>
+                <label class="label">{{strLocal}}</label>
                 <div class="control">
                   <CmbTerritorio
                     :id_prop="user.id_prop"
@@ -182,10 +192,12 @@ export default {
         active: true
       },
       senha: '',
+      role: 0,
       v$: useValidate(),
       isLoading: false,
       message: "",
       caption: "",
+      strLocal: "Local",
       type: "",
       showMessage: false,
       cFooter:{
@@ -222,6 +234,12 @@ export default {
     Loader,
     CmbTerritorio,
     footerCard
+  },
+  watch:{
+    role(value) {
+      this.user.nivel = value;
+      this.strLocal = (value == 3 ? 'Município' : (value == 2 ? 'GVE' : (value == 1 ? 'Local' : 'Regional')));
+    },
   },
   methods: {
     register() {

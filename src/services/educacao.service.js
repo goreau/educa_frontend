@@ -41,8 +41,8 @@ class EducacaoService {
     })
   }  
 
-  getEducacaos(filter){
-    return axios.get(`/educacaos/${filter}`)
+  getEducacaos(prop){
+    return axios.get(`/educacaos/${prop}`)
     .then(response => {
         return {data: response.data};
     },
@@ -114,8 +114,28 @@ class EducacaoService {
     },
     (error) => {
       throw new Error(error.data.msg);
-    })
+    })   
   }
+
+  getFoto(foto) {
+    return axios.get(`/foto/${foto}`,{ responseType: "blob" })
+    .then(response => {
+        return {data: response.data};
+    },
+    (error) => {
+        return error;
+    })
+  } 
+
+  delFoto(foto, id) {
+    return axios.delete(`/foto/${foto}/${id}`)
+    .then(response => {
+        return {data: response.data};
+    },
+    (error) => {
+        return error;
+    })
+  } 
 
 }
 
