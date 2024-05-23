@@ -51,7 +51,7 @@
                         <div class="field">
                           <label class="label">Município</label>
                           <div class="control">
-                            <CmbTerritorio :id_prop="currentUser.id" :sel="filter.id_territorio"
+                            <CmbTerritorio :id_prop="currentUser.id" :sel="filter.id_territorio" :tipo="3"
                               @selTerr="filter.id_territorio = $event" />
                           </div>
                         </div>

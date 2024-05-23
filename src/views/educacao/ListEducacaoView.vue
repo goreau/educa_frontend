@@ -58,7 +58,7 @@ export default {
   },
   methods: {
     newEducacao() {
-      this.$router.push('/educacao');
+      this.$router.push('/atividade');
       },
       editEducacao(id) {
           this.$router.push(`/edit/${id}`);

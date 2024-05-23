@@ -87,7 +87,7 @@
                                     <div class="field">
                                         <label class="label">Município</label>
                                         <div class="control">
-                                            <CmbTerritorio :id_prop="currentUser.id" :tp_projeto="3"
+                                            <CmbTerritorio :id_prop="currentUser.id" :tipo="3"
                                                 @selTerr="projetos.id_municipios = $event"
                                                 :errclass="{ 'is-danger': v$.projetos.id_municipios.$error }" />
                                             <span class="is-error" v-if="v$.projetos.id_municipios.$error">
