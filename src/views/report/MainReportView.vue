@@ -13,7 +13,7 @@
               <section class="section">
                 <div class="dvTipo">
                   <label class="label">Filtros:</label>
-                  <div class="columns">
+                  <div class="columns" v-if="currentUser.nivel == 1">
                     <div class="column is-full">
                       <div class="field">
                         <label class="label">Regional de Saúde</label>
@@ -24,7 +24,7 @@
                       </div>
                     </div>
                     </div>
-                    <div class="columns">
+                    <div class="columns" v-if="currentUser.nivel != 3">
                       <div class="column is-full">
                         <div class="field">
                           <label class="label">GVE</label>
@@ -35,7 +35,7 @@
                         </div>
                       </div>
                     </div>
-                    <div class="columns">
+                    <div class="columns" v-if="currentUser.nivel != 2">
                       <div class="column is-full">
                         <div class="field">
                           <label class="label">Colegiado</label>
@@ -51,7 +51,7 @@
                         <div class="field">
                           <label class="label">Município</label>
                           <div class="control">
-                            <CmbTerritorio :id_prop="currentUser.id" :sel="filter.id_territorio" :tipo="3"
+                            <CmbTerritorio :id_prop="currentUser.id" :sel="filter.id_territorio" :tipo="33"
                               @selTerr="filter.id_territorio = $event" />
                           </div>
                         </div>
