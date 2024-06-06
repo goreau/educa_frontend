@@ -84,7 +84,7 @@
                   <CmbTerritorio
                     :id_prop="user.id_prop"
                     :tipo="user.nivel"
-                    @selUnid="user.id_municipios = $event"
+                    @selTerr="user.id_municipios = $event"
                     :errclass="{ 'is-danger': v$.user.id_municipios.$error }"
                   />
                   <span class="is-error" v-if="v$.user.id_municipios.$error">
@@ -250,7 +250,7 @@ export default {
         authService.register(this.user).then(
           (response) => {
             this.showMessage = true;
-            this.msg = "Usuário cadastrado comm sucesso.";
+            this.message = "Usuário cadastrado com sucesso.";
             this.type = "success";
             this.caption = "Usuário";
             setTimeout(() => (this.showMessage = false), 3000);

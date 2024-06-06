@@ -267,18 +267,18 @@ export default {
     edit() {
       this.v$.$validate(); 
       if (!this.v$.$error) {
-        document.getElementById("username").classList.add("is-loading");
+        document.getElementById("login").classList.add("is-loading");
 
         authService.edit(this.user).then(
           (response) => {
             this.showMessage = true;
-            this.msg = "Dados do usuário alterados comm sucesso.";
+            this.message = "Dados do usuário alterados com sucesso.";
             this.type = "success";
             this.caption = "Usuário";
             setTimeout(() => (this.showMessage = false), 3000);
           },
           (error) => {
-            this.msg =
+            this.message =
               (error.response &&
                 error.response.data &&
                 error.response.data.message) ||
@@ -292,7 +292,7 @@ export default {
           }
         )
         .finally(() => {
-            document.getElementById("username").classList.remove("is-loading");
+            document.getElementById("login").classList.remove("is-loading");
           });
       } else {
         this.message = "Corrija os erros para enviar as informações";
