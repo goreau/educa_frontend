@@ -212,7 +212,7 @@ export default {
     return {
       user: {
         nome: {required$, minLength: minLength$(10)},
-        username: {required$, minLength: minLength$(5)},
+        username: {required$, minLength: minLength$(4)},
         password: {required$, minLength: minLength$(4)},
         email: {required$, email$},
         id_municipios: {minValue: combo$(1)},

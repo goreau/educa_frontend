@@ -3,6 +3,7 @@
     <div class="columns is-centered">
       <div class="column is-11">
         <Loader v-if="isLoading" />
+        <Message v-if="showMessage" @do-close="closeMessage" :msg="message" :type="type" :caption="caption"/>
         <div class="card">
           <header class="card-header">
             <p class="card-header-title is-centered">Atividades Cadastradas</p>
@@ -14,7 +15,7 @@
             </button>
           </header>
           <div class="card-content">
-            <MyTable :tableData="dataTable" :columns="columns" :filtered="true"/>
+            <MyTable :tableData="dataTable" :columns="columns" :filtered="true" :tableName="tableName"/>
           </div>
         </div>
         <div style="display: none;">
@@ -23,6 +24,9 @@
           </span>
           <span class="icon is-small is-left" name="coisa2">
             <font-awesome-icon  icon="fa-solid fa-trash" />
+          </span>
+          <span class="icon is-small is-left" name="coisa1">
+            <font-awesome-icon  icon="fa-solid fa-eye" />
           </span>
         </div>
       </div>
@@ -37,13 +41,19 @@ import educacaoService from "@/services/educacao.service";
 import MyTable from '@/components/forms/MyTable.vue';
 import Loader from '@/components/general/Loader.vue';
 import ConfirmDialog from '@/components/forms/ConfirmDialog.vue';
+import Message from "@/components/general/Message.vue";
 
 export default {
   name: 'ListaVendas',
   data() {
       return {
+          tableName: 'educacao',
           dataTable: [],
           isLoading: false,
+          showMessage: false,
+          message: "",
+          caption: "",
+          type: "",
           columns: [],
           myspan: null,
           myspan2: null,
@@ -53,7 +63,8 @@ export default {
   components: {
       MyTable,
       Loader,
-      ConfirmDialog
+      ConfirmDialog,
+      Message
 
   },
   methods: {
@@ -77,6 +88,7 @@ export default {
     this.id_user = this.currentUser.id;
 
     this.myspan = document.getElementsByName('coisa')[0];
+    this.myspan1 = document.getElementsByName('coisa1')[0];
     this.myspan2 = document.getElementsByName('coisa2')[0];
     //document.createElement('span');
    // this.myspan.innerHTML='<p>teste</p>';;
@@ -93,6 +105,7 @@ export default {
           .finally(() => this.isLoading = false);
 
       this.columns = [
+          {title: 'GVE', field: 'gve', type: 'string'},
           {title: 'Local', field: 'local', type: 'string'},
           {title: 'Data', field: 'data', type: 'string', sorter:"date",},
           {title: 'Tipo', field: 'tipo', type: 'string'},
@@ -133,15 +146,51 @@ export default {
                   okButton: 'Confirmar',
               })
               if (ok) {
-                educacaoService.delete(row.id_educacao);
-                location.reload();
+                educacaoService.delete(row.id_educacao)
+                .then(resp =>{
+                  if (resp.statusText == 'OK'){
+                    location.reload();
+                  } else {
+                    this.message = resp;
+                    this.showMessage = true;
+                    this.type = "alert";
+                    this.caption = "Atividades";
+                    setTimeout(() => (this.showMessage = false), 3000);
+                  }
+                })
+                .catch(err =>{
+                  this.message = err;
+                  this.showMessage = true;
+                  this.type = "alert";
+                  this.caption = "Atividades";
+                  setTimeout(() => (this.showMessage = false), 3000);
+                });
               }
+              });
+
+              const btVer = document.createElement('button');
+              btVer.type = 'button';
+              
+              
+             // btVer.disabled = this.id_user != row.owner_id;
+              btVer.style.cssText = 'height: fit-content; margin-left: 1rem;';
+              btVer.classList.add('button', 'is-info', 'is-outlined');
+              if (row.qtfotos != null){
+                btVer.title = 'Ver (c/ fotos)'; 
+              } else {
+                btVer.title = 'Ver';
+              }
+              
+              btVer.innerHTML = this.myspan1.innerHTML;
+              btVer.addEventListener('click', () => {
+                this.$router.push(`/verAtividade/${row.id_educacao}`);
               });
 
 
               const buttonHolder = document.createElement('span');
               buttonHolder.appendChild(btEdit);
               buttonHolder.appendChild(btDel);
+              buttonHolder.appendChild(btVer);
 
               return buttonHolder;
 

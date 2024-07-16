@@ -9,7 +9,8 @@
           </header>
           <div class="card-content">
             <span class="filter">{{ strFiltro }}</span>
-            <MyTable :tableData="dataTable" :columns="columns" :is-filtered="false" :has-exports="true" v-if="id > 0"/>
+            <MyTable :tableData="dataTable" :columns="columns" :is-filtered="false" :has-exports="true" v-if="id != 6"/>
+            <MyGroupedTable :tableData="dataTable" :columns="columns" :is-filtered="false" :has-exports="true" v-if="id == 6"/>
           </div>
         </div>
       </div>
@@ -20,6 +21,7 @@
 <script>
 import Loader from "@/components/general/Loader.vue";
 import MyTable from "@/components/forms/MyTable.vue";
+import MyGroupedTable from "@/components/forms/MyGroupedTable.vue";
 import reportService from "@/services/report.service";
 
 export default {
@@ -38,6 +40,7 @@ export default {
   components: {
     Loader,
     MyTable,
+    MyGroupedTable,
   },
   methods: {
     createColumns(){
@@ -97,6 +100,22 @@ export default {
                         { title: "Módulo", field: "modulo", type: "string" },
                      
           ];
+          break;
+        case '6':
+          this.title = 'Detalhamento de Atividades';
+          this.group = ['municipio','programa']
+          this.columns = [
+                        { title: "Município", field: "municipio", type: "string" },
+                        { title: "Programa", field: "programa", type: "string" },
+                        { title: "Atividade", field: "atividade", type: "string" },
+                        { title: "Módulo", field: "modulo", type: "string" },
+                        { title: "Tema", field: "tema", type: "string" },
+                        { title: "Data", field: "data", type: "string", sorter: "date" },
+                        { title: "Dias", field: "dias", type: "string" },
+                        { title: "Campo", field: "campo", type: "string" },
+                        { title: "Técnico", field: "tecnico", type: "string" },
+                        { title: "Participantes", field: "participantes", type: "string" },
+                      ];
           break;
         default:
           break;

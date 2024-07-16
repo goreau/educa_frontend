@@ -32,20 +32,6 @@
                 </div>
               </div>
               <div class="field">
-                <label class="label">{{ strLocal }}</label>
-                <div class="control">
-                  <div class="control">
-                  <input
-                    class="input"
-                    type="text"
-                    placeholder="Nome"
-                    v-model="municipio"
-                    readonly
-                  />
-                </div>
-                </div>
-              </div>
-              <div class="field">
                 <label class="label">Nível</label>
                 <div class="control has-icons-left has-icons-right">
                   <label class="radio">
@@ -53,8 +39,8 @@
                       type="radio"
                       nome="nivel"
                       value="1"
-                      v-model="user.nivel"
-                      :disabled="true"
+                      v-model="role"
+                      :disabled="currentUser.nivel > 1"
                     />
                     Administrador
                   </label>
@@ -63,8 +49,8 @@
                       type="radio"
                       nome="nivel"
                       value="9"
-                      v-model="user.nivel"
-                      :disabled="true"
+                      v-model="role"
+                      :disabled="currentUser.nivel == 2 || currentUser.nivel == 3"
                     />
                     Gestor Regional
                   </label>
@@ -73,8 +59,8 @@
                       type="radio"
                       name="role"
                       value="2"
-                      v-model="user.nivel"
-                      :disabled="true"
+                      v-model="role"
+                      :disabled="currentUser.nivel == 3"
                     />
                     Gestor Local
                   </label>
@@ -83,11 +69,25 @@
                       type="radio"
                       nome="nivel"
                       value="3"
-                      v-model="user.nivel"
-                      :disabled="true"
+                      v-model="role"
                     />
                     Usuário Município
                   </label>
+                </div>
+              </div>
+              <div class="field">
+                <label class="label">{{ strLocal }}</label>
+                <div class="control">
+                    <CmbTerritorio
+                      :id_prop="user.id_prop"
+                      :tipo="user.nivel"
+                      :sel="user.id_municipios"
+                      @selTerr="user.id_municipios = $event"
+                      :errclass="{ 'is-danger': v$.user.id_municipios.$error }"
+                    />
+                    <span class="is-error" v-if="v$.user.id_municipios.$error">
+                      {{ v$.user.id_municipios.$errors[0].$message }}
+                    </span>
                 </div>
               </div>
               <div class="field">
@@ -164,7 +164,7 @@
 <script>
 import Message from "@/components/general/Message.vue";
 import Loader from "@/components/general/Loader.vue";
-import CmbUnidade from "@/components/forms/CmbTerritorio.vue";
+import CmbTerritorio from "@/components/forms/CmbTerritorio.vue";
 import footerCard from '@/components/forms/FooterCard.vue'
 import authService from "@/services/auth.service";
 import useValidate from "@vuelidate/core";
@@ -185,10 +185,11 @@ export default {
         username: "",
         password: "",
         email: "",
-        id_unidade: 0,
+        id_municipios: 0,
         nivel: 0,
         id_prop: 0,
       },
+      role: 0,
       password: '',
       municipio: '',
       v$: useValidate(),
@@ -210,10 +211,11 @@ export default {
     return {
       user: {
         nome: {required$, minLength: minLength$(10)},
-        username: {required$, minLength: minLength$(5)},
+        username: {required$, minLength: minLength$(4)},
         password: {required$, minLength: minLength$(4)},
         email: {required$, email$},
         nivel: { minValue: combo$(1) },
+        id_municipios: {minValue: combo$(1)},
       },
       password: {sameAs: sameAs$(this.user.password)}
     }
@@ -229,7 +231,7 @@ export default {
   components: {
     Message,
     Loader,
-    CmbUnidade,
+    CmbTerritorio,
     footerCard
   },
   methods: {
@@ -241,11 +243,11 @@ export default {
           let data = response.data;
           this.user.nome = data.nome;
           this.user.username = data.username;
-          this.id_municipios = data.id_municipios;
+          this.user.id_municipios = data.id_municipios;
           this.municipio = data.municipio;
           this.user.email = data.email;
-          this.user.nivel = data.nivel;
-          this.strLocal = (data.nivel == 3 ? 'Município' : (data.nivel == 2 ? 'GVE' : (data.nivel == 1 ? 'Local' : 'Regional')));
+          this.role = data.nivel;
+         // this.strLocal = (data.nivel == 3 ? 'Município' : (data.nivel == 2 ? 'GVE' : (data.nivel == 1 ? 'Local' : 'Regional')));
         },
         (error) => {
           this.message =
@@ -301,6 +303,12 @@ export default {
         this.caption = "Usuário";
         setTimeout(() => (this.showMessage = false), 3000);
       }
+    },
+  },
+  watch:{
+    role(value) {
+      this.user.nivel = value;
+      this.strLocal = (value == 3 ? 'Município' : (value == 2 ? 'GVE' : (value == 1 ? 'Local' : 'Regional')));
     },
   },
   mounted() {

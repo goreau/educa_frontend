@@ -73,6 +73,11 @@ const routes = [
     component: () => import('../views/educacao/DetalhesView.vue'),
   },
   {
+    path: '/verAtividade/:id',
+    name: 'verAtividade',
+    component: () => import( '../views/educacao/VerEducacaoView.vue'),
+  },
+  {
     path: '/reports/:id',
     name: 'reports',
     component: () => import( '../views/report/MainReportView.vue'),

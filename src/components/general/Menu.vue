@@ -66,6 +66,7 @@
               { name: "03. Resumo de Treinamentos",path: "relatório>03. resumo de treinamentos", "route": "/reports/3"}, 
               { name: "04. Resumo de Projetos",path: "relatório>04. resumo de projetos", "route": "/reports/4"},
               { name: "05. Atividades por Projeto",path: "relatório>05. atividades por projeto", "route": "/reports/5"}, 
+              { name: "06. Detalhamento de Atividades",path: "relatório>06. detalhamento de atividades", "route": "/reports/6"}, 
             ]
           },
         ]

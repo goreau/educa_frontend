@@ -3,6 +3,7 @@
     <div class="columns is-centered">
       <div class="column is-11">
         <Loader v-if="isLoading" />
+        <Message v-if="showMessage" @do-close="closeMessage" :msg="message" :type="type" :caption="caption" />
         <div class="card">
           <header class="card-header">
             <p class="card-header-title is-centered">Usuários Cadastrados</p>
@@ -14,7 +15,7 @@
             </button>
           </header>
           <div class="card-content">
-            <MyTable :tableData="dataTable" :columns="columns" :filtered="true"/>
+            <MyTable :tableData="dataTable" :columns="columns" :filtered="true" :tableName="tableName"/>
           </div>
         </div>
         <div style="display: none;">
@@ -35,14 +36,20 @@
 import authService from "@/services/auth.service";
 import MyTable from '@/components/forms/MyTable.vue';
 import Loader from '@/components/general/Loader.vue';
+import Message from "@/components/general/Message.vue";
 import ConfirmDialog from '@/components/forms/ConfirmDialog.vue';
 
 export default {
   name: 'ListaVendas',
   data() {
       return {
+          tableName: 'usuarios',
           dataTable: [],
           isLoading: false,
+          showMessage: false,
+          message: "",
+          caption: "",
+          type: "",
           columns: [],
           myspan: null,
           myspan2: null,
@@ -52,7 +59,8 @@ export default {
   components: {
       MyTable,
       Loader,
-      ConfirmDialog
+      ConfirmDialog,
+      Message,
 
   },
   methods: {
@@ -92,6 +100,7 @@ export default {
           .finally(() => this.isLoading = false);
 
       this.columns = [
+          {title: 'Grupo', field: 'gve', type: 'string'},
           {title: 'Nome', field: 'nome', type: 'string'},
           {title: 'Login', field: 'username', type: 'string'},
           {title: 'Local', field: 'municipio', type: 'string'},
@@ -129,8 +138,25 @@ export default {
                   okButton: 'Confirmar',
               })
               if (ok) {
-                authService.delete(row.id);
-                location.reload();
+                authService.delete(row.id)
+                .then(resp =>{
+                  if (resp.statusText == 'OK'){
+                    location.reload();
+                  } else {
+                    this.message = resp;
+                    this.showMessage = true;
+                    this.type = "alert";
+                    this.caption = "Usuário";
+                    setTimeout(() => (this.showMessage = false), 3000);
+                  }
+                })
+                .catch(err =>{
+                  this.message = err;
+                  this.showMessage = true;
+                  this.type = "alert";
+                  this.caption = "Usuário";
+                  setTimeout(() => (this.showMessage = false), 3000);
+                })
               }
               });
 

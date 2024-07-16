@@ -130,7 +130,7 @@ export default {
         id_drs: 0,
         id_gve: 0,
         id_colegiado: 0,
-        id_municipio: 0,
+        id_territorio: 0,
         dt_inicio: "",
         dt_final: "",
         id_programa: 0,

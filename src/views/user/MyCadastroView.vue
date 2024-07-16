@@ -145,10 +145,10 @@
                     type="password"
                     v-model="senha"
                     placeholder="Confirme a senha"
-                    :class="{ 'is-danger': v$.password.$error }"
+                    :class="{ 'is-danger': v$.senha.$error }"
                   />
-                  <span class="is-error" v-if="v$.password.$error">
-                    {{ v$.password.$errors[0].$message }}
+                  <span class="is-error" v-if="v$.senha.$error">
+                    {{ v$.senha.$errors[0].$message }}
                   </span>
                 </div>
               </div>
@@ -193,7 +193,7 @@ export default {
         role: 0,
         id: 1,
       },
-      version: '06.06',
+      version: '04.07',
       senha: '',
       v$: useValidate(),
       unidade:'',
@@ -204,7 +204,7 @@ export default {
       strLocal: "Município",
       showMessage: false,
       cFooter:{
-          strSubmit:'Entrar',
+          strSubmit:'Salvar',
           strCancel: 'Cancelar',
           strAux:'',
           aux: false
@@ -216,9 +216,10 @@ export default {
       user: {
         nome: {required$, minLength: minLength$(10)},
         new_password: {required$, minLength: minLength$(4)},
+        username: {required$, minLength: minLength$(4)},
         email: {required$, email$},
       },
-      password: {sameAs: sameAs$(this.user.new_password)}
+      senha: {sameAs: sameAs$(this.user.new_password)}
     }
   },
   computed: {

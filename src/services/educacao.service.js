@@ -27,7 +27,7 @@ class EducacaoService {
       return response;
     },
     (error) => {
-      return error.response.data;
+      throw new Error(error.data.msg);
     })
   }
 
@@ -129,6 +129,16 @@ class EducacaoService {
 
   delFoto(foto, id) {
     return axios.delete(`/foto/${foto}/${id}`)
+    .then(response => {
+        return {data: response.data};
+    },
+    (error) => {
+        return error;
+    })
+  } 
+
+  getView(id) {
+    return axios.get(`/educacao_view/${id}`)
     .then(response => {
         return {data: response.data};
     },
