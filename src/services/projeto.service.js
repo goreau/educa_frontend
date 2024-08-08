@@ -37,7 +37,14 @@ class ProjetoService {
       return response;
     },
     (error) => {
-      return error.response.data;
+      if (error.hasOwnProperty('response')){
+        return error.response.data;
+      } else if (error.hasOwnProperty('data')){
+        return error.data.msg;
+      } else {
+        return error;
+      }
+      
     })
   }  
 

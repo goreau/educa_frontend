@@ -154,12 +154,12 @@
         this.tabulator.download("csv", "data.csv");
       },
       download_xlsx() {
-        this.tabulator.download("xlsx", "data.xlsx", { sheetName: "Inseticida" });
+        this.tabulator.download("xlsx", "data.xlsx", { sheetName: "Educa" });
       },
       download_pdf() {
         this.tabulator.download("pdf", "data.pdf", {
           orientation: "portrait", //set page orientation to portrait
-          title: "Sistema Inseticida", //add title to report
+          title: "Sistema Edduca", //add title to report
         });
       },
       download_json() {

@@ -142,7 +142,7 @@ export default {
               if (ok) {
                 projetoService.delete(row.id_projetos)
                 .then(resp =>{
-                  if (resp.statusText == 'OK'){
+                  if (resp.status == '200'){
                     location.reload();
                   } else {
                     this.message = resp;

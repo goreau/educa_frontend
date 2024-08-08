@@ -148,7 +148,7 @@ export default {
               if (ok) {
                 educacaoService.delete(row.id_educacao)
                 .then(resp =>{
-                  if (resp.statusText == 'OK'){
+                  if (resp.status == '200'){
                     location.reload();
                   } else {
                     this.message = resp;

@@ -294,13 +294,13 @@ export default {
     validations() {
         return {
             projetos: {
-                nome: { required$, maxLength: 60 },
+                nome: { required$, maxLength: maxLength$(60) },
                 id_programas: { minValue: combo$(1), },
                 id_municipios: { minValue: combo$(1), },
                 tp_projeto: { required$ },
-                localidade: { maxLength: 60 },
+                localidade: { maxLength: maxLength$(60) },
                 justificativa: { required$ },
-                responsavel: { required$, maxLength: 60 },
+                responsavel: { required$, maxLength: maxLength$(65) },
                 metodologia: { required$ },
                 parcerias: { required$ },
                 publico_alvo: { required$ },
