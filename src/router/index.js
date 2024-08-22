@@ -33,6 +33,16 @@ const routes = [
     component: () => import(/* webpackChunkName: "home" */ '../views/user/MyCadastroView.vue'), 
   },
   {
+    path: '/forgot',
+    name: 'forgot',
+    component: () => import(/* webpackChunkName: "home" */ '../views/user/ForgotView.vue'), 
+  },
+  {
+    path: '/reset/:token',
+    name: 'reset',
+    component: () => import('../views/user/ResetView.vue'), 
+  },
+  {
     path: '/projeto',
     name: 'projeto',
     component: () => import( '../views/projeto/ProjetoView.vue'),

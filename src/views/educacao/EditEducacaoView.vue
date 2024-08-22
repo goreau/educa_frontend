@@ -378,7 +378,7 @@ export default {
                 })
         },
         proj(value) {
-            this.educacao.id_educacao = value;  
+            this.educacao.id_projetos = value;  
             
             projetoService.getFasesCombo(value)
                 .then((response) => {

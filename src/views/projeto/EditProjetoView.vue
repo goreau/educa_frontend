@@ -241,6 +241,7 @@ import CmbTerritorio from "@/components/forms/CmbTerritorio.vue";
 
 import {
     required$,
+    maxLength$,
     combo$,
 } from "../../components/forms/validators.js";
 

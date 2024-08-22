@@ -29,6 +29,7 @@
                           </span>
                         </div>
                   </div>
+                  <a href="#/forgot">Esqueci minha senha</a>
                 </div>
               </div>
               <footer class="card-footer">
