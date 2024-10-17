@@ -101,13 +101,13 @@ export default {
           .finally(() => this.isLoading = false);
 
       this.columns = [
-          {title: 'GVE', field: 'gve', type: 'string'},
-          {title: 'Local', field: 'local', type: 'string'},
-          {title: 'Nome', field: 'nome', type: 'string'},
-          {title: 'Programa', field: 'programa', type: 'string'},    
-          {title: 'Responsável', field: 'responsavel', type: 'string'},     
-          {title: 'Criação', field: 'criacao', type: 'string', sorter:"date",},
-          {title: 'Ações',  
+          {title: 'GVE', field: 'gve', type: 'string', minWidth: 150, responsive: 3},
+          {title: 'Local', field: 'local', type: 'string', minWidth: 150},
+          {title: 'Nome', field: 'nome', type: 'string', minWidth: 250},
+          {title: 'Programa', field: 'programa', type: 'string', minWidth: 150},    
+          {title: 'Responsável', field: 'responsavel', type: 'string', minWidth: 150},     
+          {title: 'Criação', field: 'criacao', type: 'string', sorter:"date", minWidth: 150, responsive: 2},
+          {title: 'Ações', responsive:0, minWidth: 200,
             formatter: (cell, formatterParrams) =>{
               const row = cell.getRow().getData();
 

@@ -177,7 +177,6 @@ export default {
 <style lang="scss">
 @import "@/components/general/css/custom-var";
 
-
 * {
   font-family: Helvetica;
   font-size: medium;

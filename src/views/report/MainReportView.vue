@@ -71,7 +71,7 @@
                       <div class="column is-half">
                         <label class="label">Início</label>
                         <div class="field">
-                          <div class="control">
+                          <div class="control" id="contIni">
                             <input type="date" id="dtIni" />
                           </div>
                         </div>
@@ -80,7 +80,7 @@
                       <div class="column is-half">
                         <label class="label">Término</label>
                         <div class="field">
-                          <div class="control">
+                          <div class="control" id="contFim">
                             <input type="date" id="dtFim" />
                           </div>
 
@@ -187,16 +187,21 @@ export default {
     }
     if (this.hasData) {
 
-      const element = document.querySelector('#dtIni');
+      const teste = document.querySelector('#dtIni');
 
-      if (element.type == 'text') {
-        return true;
+      if (teste.type == 'text') {
+        const elIni = document.querySelector('#contIni');
+        elIni.innerHTML = "<input type='date' id='dtIni' />";
+        
+        const elFim = document.querySelector('#contFim');
+        elFim.innerHTML = "<input type='date' id='dtFim' />";
       }
 
+      const element = document.querySelector('#dtIni');
       var options = {
         type: "date",
         dateFormat: "dd/MM/yyyy",
-        dateStart: this.ini_date,
+        startDate: this.ini_date,
         showHeader: false,
         color: "primary"
       };
@@ -208,12 +213,16 @@ export default {
         element.bulmaCalendar.on('select', datepicker => {
           this.filter.dt_inicio = moment(datepicker.data.startDate).format('YYYY-MM-DD');
         });
+
+        element.bulmaCalendar.on('clear', datepicker => {
+          this.filter.dt_inicio = '';
+        });
       }
 
       options = {
         type: "date",
         dateFormat: "dd/MM/yyyy",
-        dateStart: this.fim_date,
+        startDate: this.fim_date,
         showHeader: false,
         color: "primary"
       };
@@ -227,6 +236,9 @@ export default {
         element2.bulmaCalendar.on('select', datepicker => {
           this.filter.dt_final = moment(datepicker.data.startDate).format('YYYY-MM-DD');
         });
+        element2.bulmaCalendar.on('clear', datepicker => {
+          this.filter.dt_final = '';
+        });
       }
     }
   },
@@ -239,6 +251,8 @@ export default {
   watch: {
     '$route'() {
       this.tipo_relat = this.$route.params.id;
+      var dtarray = new Array('1', '3', '4', '6', '7', '8');
+      this.hasData = dtarray.indexOf(this.tipo_relat) != -1;
     }
   },
 };

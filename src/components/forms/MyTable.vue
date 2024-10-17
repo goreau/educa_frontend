@@ -9,17 +9,13 @@
         </label>
       </div>
     </div>
-    <div class="column is-10" :style="{visibility: filter ? 'visible' : 'hidden'}">
+    <div class="column is-10" :style="{ visibility: filter ? 'visible' : 'hidden' }">
       <div class="columns">
         <div class="column is-3">
           <div class="select">
             <select v-model="form.field" class="input">
               <option value="0">-- Coluna --</option>
-              <option
-                v-for="(item, index) in cbColumns"
-                :key="index"
-                :value="item.field"
-              >
+              <option v-for="(item, index) in cbColumns" :key="index" :value="item.field">
                 {{ item.title }}
               </option>
             </select>
@@ -41,12 +37,7 @@
         </div>
         <div class="column is-3">
           <div class="field has-addons">
-            <input
-              type="text"
-              class="input"
-              v-model="form.value"
-              placeholder="Valor a filtrar"
-            />
+            <input type="text" class="input" v-model="form.value" placeholder="Valor a filtrar" />
             <div class="control">
               <a class="button is-info" @click="setFilter">
                 <span class="icon is-small">
@@ -59,8 +50,8 @@
         <div class="column is-1">
           <button class="button is-success is-outlined" title="Limpar Filtros" @click="clearFilter">
             <span class="icon is-small">
-                  <font-awesome-icon icon="fa-solid fa-broom" />
-                </span>
+              <font-awesome-icon icon="fa-solid fa-broom" />
+            </span>
           </button>
         </div>
       </div>
@@ -68,32 +59,16 @@
   </div>
 
   <div class="has-text-right">
-    <button
-      id="download-csv"
-      class="button is-link is-outlined is-small"
-      @click="download_csv"
-    >
+    <button id="download-csv" class="button is-link is-outlined is-small" @click="download_csv">
       <font-awesome-icon icon="fa-solid fa-file-csv" />
     </button>
-    <button
-      id="download-json"
-      class="button is-info is-outlined is-small"
-      @click="download_json"
-    >
+    <button id="download-json" class="button is-info is-outlined is-small" @click="download_json">
       <font-awesome-icon icon="fa-solid fa-file-lines" />
     </button>
-    <button
-      id="download-xlsx"
-      class="button is-success is-outlined is-small"
-      @click="download_xlsx"
-    >
+    <button id="download-xlsx" class="button is-success is-outlined is-small" @click="download_xlsx">
       <font-awesome-icon icon="fa-solid fa-file-excel" />
     </button>
-    <button
-      id="download-pdf"
-      class="button is-danger is-outlined is-small"
-      @click="download_pdf"
-    >
+    <button id="download-pdf" class="button is-danger is-outlined is-small" @click="download_pdf">
       <font-awesome-icon icon="fa-solid fa-file-pdf" />
     </button>
   </div>
@@ -102,6 +77,7 @@
 
 <script>
 import { TabulatorFull as Tabulator } from "tabulator-tables"; //import Tabulator library
+import { ResponsiveLayoutModule } from 'tabulator-tables';
 import lang from "./lang";
 
 
@@ -115,9 +91,9 @@ export default {
         value: "",
         typed: "string",
       },
-      arrFilter:[],
+      arrFilter: [],
       filter: false,
-      cbColumns:[]
+      cbColumns: []
     };
   },
   methods: {
@@ -127,7 +103,7 @@ export default {
       const col = this.columns.filter((v) => v.field === obj.field, obj);
       obj.typed = col[0].type;
 
-      this.arrFilter.push({field: obj.field, type: obj.type, value: obj.value});
+      this.arrFilter.push({ field: obj.field, type: obj.type, value: obj.value });
 
       this.tabulator.setFilter(this.arrFilter);//obj.column, obj.operator, obj.value);
 
@@ -140,7 +116,7 @@ export default {
 
       this.arrFilter = [],
 
-      this.tabulator.clearFilter();
+        this.tabulator.clearFilter();
       localStorage.removeItem(this.tableName);
     },
     download_csv() {
@@ -150,10 +126,15 @@ export default {
       this.tabulator.download("xlsx", "data.xlsx", { sheetName: "Educa" });
     },
     download_pdf() {
-      this.tabulator.download("pdf", "data.pdf", {
-        orientation: "portrait", //set page orientation to portrait
-        title: "Sistema Educa", //add title to report
-      });
+      try {
+        this.tabulator.download("pdf", "data.pdf", {
+          orientation: "landscape", //set page orientation to portrait
+          title: "Sistema Educa", //add title to report
+        });
+      } catch (error) {
+        this.$router.go();
+      }
+
     },
     download_json() {
       this.tabulator.download("json", "data.json");
@@ -162,15 +143,16 @@ export default {
       this.filter = e.target.checked;
     },
   },
-  props: ["tableData", "columns","filtered","tableName"],
+  props: ["tableData", "columns", "filtered", "tableName"],
   watch: {
     tableData(value) {
       this.tabulator = new Tabulator(this.$refs.table, {
         langs: lang,
         locale: "pt-br",
         data: value, //link data to table
+        responsiveLayout: true,
         layout: "fitColumns",
-        placeholder:"Nenhum registro atende aos critérios escolhidos!",
+        placeholder: "Nenhum registro atende aos critérios escolhidos!",
         reactiveData: true, //enable data reactivity
         columns: this.columns, //define table columns
         pagination: "local",
@@ -179,13 +161,17 @@ export default {
         movableColumns: true,
         paginationCounter: "rows",
       });
-    
 
-      this.cbColumns = this.columns.filter( el => el.title !== "Ações");
 
-      if (this.filter){
-        this.tabulator.setFilter(this.arrFilter);//this.form.column, this.form.operator, this.form.value);
-      }
+      this.cbColumns = this.columns.filter(el => el.title !== "Ações");
+
+      this.tabulator.on("tableBuilt", function () {
+        if (this.filter && this.tabulator.ta) {
+          this.tabulator.setFilter(this.arrFilter);//this.form.column, this.form.operator, this.form.value);
+          this.$router.go();
+        }
+      });
+
     },
   },
   mounted() {
@@ -196,31 +182,36 @@ export default {
     );
     document.head.appendChild(externalScript);
 
+    let externalScript1 = document.createElement("script");
+    externalScript1.setAttribute(
+      "src",
+      "https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.4.0/jspdf.umd.min.js"
+    );
+    document.head.appendChild(externalScript1);
+
+    let externalScript2 = document.createElement("script");
+    externalScript2.setAttribute(
+      "src",
+      "https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.20/jspdf.plugin.autotable.min.js"
+    );
+    document.head.appendChild(externalScript2);
+
+
+
     let stFilter = JSON.parse(localStorage.getItem(this.tableName));
-    
+
     if (stFilter) {
-      if (Array.isArray(stFilter)){
+      if (Array.isArray(stFilter)) {
         this.arrFilter = stFilter;
         var obj = stFilter[0];
         this.form = obj;//JSON.parse(obj);
         this.filter = true;
       } else {
         localStorage.removeItem(this.tableName);
-      }  
+      }
     }
 
-   /* let externalScript1 = document.createElement("script");
-    externalScript1.setAttribute(
-      "src",
-      "https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.4.0/jspdf.umd.min.js"
-    );
-    document.head.appendChild(externalScript1);
-    let externalScript2 = document.createElement("script");
-    externalScript2.setAttribute(
-      "src",
-      "https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.20/jspdf.plugin.autotable.min.js"
-    );
-    document.head.appendChild(externalScript2);*/
+
   },
 };
 </script>
@@ -272,15 +263,15 @@ export default {
   transition: 0.4s;
 }
 
-input:checked + .slider {
+input:checked+.slider {
   background-color: #2a455a;
 }
 
-input:focus + .slider {
+input:focus+.slider {
   box-shadow: 0 0 1px #2a455a;
 }
 
-input:checked + .slider:before {
+input:checked+.slider:before {
   -webkit-transform: translateX(1rem);
   -ms-transform: translateX(1rem);
   transform: translateX(1rem);

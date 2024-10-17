@@ -193,7 +193,7 @@ export default {
         role: 0,
         id: 1,
       },
-      version: '08.08',
+      version: '29.08',
       senha: '',
       v$: useValidate(),
       unidade:'',

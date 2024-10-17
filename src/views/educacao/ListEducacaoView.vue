@@ -105,15 +105,15 @@ export default {
           .finally(() => this.isLoading = false);
 
       this.columns = [
-          {title: 'GVE', field: 'gve', type: 'string'},
-          {title: 'Local', field: 'local', type: 'string'},
-          {title: 'Data', field: 'data', type: 'string', sorter:"date",},
-          {title: 'Tipo', field: 'tipo', type: 'string'},
-          {title: 'Programa', field: 'programa', type: 'string'},    
-          {title: 'Atividade', field: 'atividade', type: 'string'}, 
-          {title: 'Módulo', field: 'modulo', type: 'string'},    
-          {title: 'Criação', field: 'criacao', type: 'string', sorter:"date",},
-          {title: 'Ações',  
+          {title: 'GVE', field: 'gve', type: 'string', minWidth: 150, responsive: 3},
+          {title: 'Local', field: 'local', type: 'string', minWidth: 150},
+          {title: 'Data', field: 'data', type: 'string', sorter:"date", minWidth: 150},
+          {title: 'Tipo', field: 'tipo', type: 'string', minWidth: 150},
+          {title: 'Programa', field: 'programa', type: 'string', minWidth: 150},    
+          {title: 'Atividade', field: 'atividade', type: 'string', minWidth: 150}, 
+          {title: 'Módulo', field: 'modulo', type: 'string', minWidth: 150},    
+          {title: 'Criação', field: 'criacao', type: 'string', sorter:"date", minWidth: 150, responsive: 2},
+          {title: 'Ações', responsive:0, minWidth: 300,
             formatter: (cell, formatterParrams) =>{
               const row = cell.getRow().getData();
 
