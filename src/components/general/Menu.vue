@@ -20,6 +20,9 @@
       <template #ativ>
         <font-awesome-icon icon="fa-solid fa-cubes" />
       </template>
+      <template #trash>
+        <font-awesome-icon icon="fa-solid fa-trash" />
+      </template>
       </DockMenu>
 </template>
 
@@ -40,8 +43,9 @@
             name: "Usuário",
             iconSlot: "users",
             menu: [
-              { name: "Cadastrar",path: "usuário>cadastrar", route: "/user", iconSlot: "user",}, 
-              {name: "Consultar",path: "usuário>consultar", route: "/users", iconSlot: "search",}
+              { name: "Cadastrar",path: "usuário>cadastrar", route: "/user", iconSlot: "user"}, 
+              {name: "Consultar",path: "usuário>consultar", route: "/users", iconSlot: "search"},
+              {name: "Excluir",path: "usuário>excluir", route: "/trocauser", iconSlot: "trash"}
             ]
           },
           {

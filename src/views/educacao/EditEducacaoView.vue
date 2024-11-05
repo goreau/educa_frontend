@@ -260,7 +260,7 @@ export default {
     },
     methods: {
         details(){
-            this.$router.push(`/educacao_det/${this.educacao.id_educacao}`);
+            this.$router.push(`/educacao_det/${this.educacao.id_educacao}/${this.educacao.id_atividade}`);
         },
         startCalendar(){
             const options = {

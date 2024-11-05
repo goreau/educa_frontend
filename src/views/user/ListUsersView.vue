@@ -102,9 +102,10 @@ export default {
       this.columns = [
           {title: 'Grupo', field: 'gve', type: 'string', minWidth: 150, responsive: 2},
           {title: 'Nome', field: 'nome', type: 'string', minWidth: 200, responsive: 3},
+          {title: 'Email', field: 'email', type: 'string', minWidth: 200, responsive: 4},
           {title: 'Login', field: 'username', type: 'string', minWidth: 150},
           {title: 'Local', field: 'municipio', type: 'string', minWidth: 150},
-          {title: 'Nivel', field: 'role', type: 'string', minWidth: 150},
+          {title: 'Nivel', field: 'role', type: 'string', minWidth: 100},
           {title: 'Ações', responsive: 0, minWidth: 250, 
             formatter: (cell, formatterParrams) =>{
               const row = cell.getRow().getData();

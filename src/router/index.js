@@ -43,6 +43,11 @@ const routes = [
     component: () => import('../views/user/ResetView.vue'), 
   },
   {
+    path: '/trocaUser',
+    name: 'reset',
+    component: () => import('../views/user/TrocaUserView.vue'), 
+  },
+  {
     path: '/projeto',
     name: 'projeto',
     component: () => import( '../views/projeto/ProjetoView.vue'),
@@ -78,7 +83,7 @@ const routes = [
     component: () => import( '../views/educacao/EditEducacaoView.vue'),
   },
   {
-    path: '/educacao_det/:educ',
+    path: '/educacao_det/:educ/:ativ',
     name: 'educacao_det',
     component: () => import('../views/educacao/DetalhesView.vue'),
   },

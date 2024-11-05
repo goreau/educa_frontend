@@ -43,6 +43,10 @@
                 <label class="label">Participantes</label>
                 <input type="number" class="input" placeholder="Qt Pessoas" v-model="educacao_det.participantes" />
               </div>
+              <div class="field" v-if="tiragem">
+                <label class="label">Tiragem</label>
+                <input type="number" class="input" placeholder="Nº de exemplares produzidos" v-model="educacao_det.tiragem" />
+              </div>
             </div>
           </div>
           <footer class="card-footer">
@@ -151,13 +155,15 @@ export default {
         id_tipo_instituicao: 0,
         campo: "",
         tecnico: "",
-        participantes: ''
+        participantes: '',
+        tiragem: 0
       },
       options: {
         max: 'Disponíveis: ',
         ready: 'Pronto',
         select: 'selecionado(s)',
       },
+      tiragem: false,
       v$: useValidate(),
       max: 3,
       component: {},
@@ -235,6 +241,7 @@ export default {
       this.educacao_det.campo = row.campo;
       this.educacao_det.tecnico = row.tecnico;
       this.educacao_det.participantes = row.participantes;
+      this.educacao_det.tiragem = row.tiragem;
     },
     create() {
       this.v$.$validate(); // checks all inputs
@@ -245,9 +252,9 @@ export default {
           educacaoService.updateDet(this.educacao_det).then(
             (response) => {
               this.showMessage = true;
-              this.message = "Fase alterada com sucesso!!";
+              this.message = "Atividade alterada com sucesso!!";
               this.type = "success";
-              this.caption = "Cronograma";
+              this.caption = "Atividade";
               setTimeout(() => (this.showMessage = false), 3000);
               this.setTableData();
             },
@@ -255,7 +262,7 @@ export default {
               this.message = error;
               this.showMessage = true;
               this.type = "alert";
-              this.caption = "Cronograma";
+              this.caption = "Atividade";
               setTimeout(() => (this.showMessage = false), 3000);
             }
           )
@@ -268,7 +275,7 @@ export default {
               this.showMessage = true;
               this.message = "Público inserido com sucesso!!";
               this.type = "success";
-              this.caption = "Cronograma";
+              this.caption = "Atividade";
               setTimeout(() => (this.showMessage = false), 3000);
               this.setTableData();
             },
@@ -276,7 +283,7 @@ export default {
               this.message = error;
               this.showMessage = true;
               this.type = "alert";
-              this.caption = "Cronograma";
+              this.caption = "Atividade";
               setTimeout(() => (this.showMessage = false), 3000);
             }
           )
@@ -346,6 +353,7 @@ export default {
         { title: 'Campo', field: 'campo', type: 'string' },
         { title: 'Técnico', field: 'tecnico', type: 'string' },
         { title: 'Participantes', field: 'participantes', type: 'string' },
+        { title: 'Tiragem', field: 'tiragem', type: 'string' },
         {
           title: 'Ações',
           formatter: (cell, formatterParrams) => {
@@ -396,6 +404,7 @@ export default {
   },
   created() {
     this.educacao_det.id_educacao = this.$route.params.educ;
+    this.tiragem = this.$route.params.ativ == 41;
   },
 };
 </script>

@@ -60,6 +60,16 @@ class ParceriaService {
         return error.response.data;
     })
   }
+
+  trocaUser(data) {
+    return axios.post("/trocauser", data)
+    .then(response => {
+      return response;
+    },
+    (error) => {
+      throw new Error(error.data.msg);
+    })
+  }
   
 }
 
