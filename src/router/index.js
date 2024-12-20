@@ -38,8 +38,8 @@ const routes = [
     component: () => import(/* webpackChunkName: "home" */ '../views/user/ForgotView.vue'), 
   },
   {
-    path: '/reset/:token',
-    name: 'reset',
+    path: '/resets/:token',
+    name: 'resets',
     component: () => import('../views/user/ResetView.vue'), 
   },
   {
@@ -106,6 +106,11 @@ const routes = [
     path: '/home',
     name: 'home',
     component:  () => import(/* webpackChunkName: "about" */ '../views/general/HomeView.vue')
+  },
+  {
+    path: '/ajuda',
+    name: 'ajuda',
+    component:  () => import(/* webpackChunkName: "about" */ '../views/general/HelpView.vue')
   },
 ]
 

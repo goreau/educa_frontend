@@ -108,8 +108,7 @@
                                 <div class="column is-half">
                                     <div class="field">
                                         <label class="label">Duração (dias)</label>
-                                        <input type="number" class="input" placeholder="Numérico"
-                                            v-model="educacao.dias" />
+                                        <input type="number" class="input" placeholder="Numérico" min="0" v-model="educacao.dias" />
                                             <span class="is-error" v-if="v$.educacao.dias.$error">
                                             {{ v$.educacao.dias.$errors[0].$message }}
                                         </span>

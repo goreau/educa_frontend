@@ -32,20 +32,36 @@
               </div>
 
               <div class="field">
-                <label class="label">Campo</label>
-                <input type="number" class="input" placeholder="Qt Profissionais" v-model="educacao_det.campo" />
+                <label class="label">Campo
+                  <span class="icon is-small is-right"
+                    title="Número de pessoas de campo envolvidas na execução da atividade.">
+                    <font-awesome-icon icon="fa-solid fa-circle-question" />
+                  </span>
+                </label>
+                  <input type="number" class="input" placeholder="Qt Profissionais" v-model="educacao_det.campo" />
               </div>
               <div class="field">
-                <label class="label">Técnico</label>
+                <label class="label">Técnico
+                  <span class="icon is-small is-right"
+                    title="Número de pessoas de nível técnico envolvidas na execução da atividade.">
+                    <font-awesome-icon icon="fa-solid fa-circle-question" />
+                  </span>
+                </label>
                 <input type="number" class="input" placeholder="Qt Profissionais" v-model="educacao_det.tecnico" />
               </div>
               <div class="field">
-                <label class="label">Participantes</label>
+                <label class="label">Participantes
+                  <span class="icon is-small is-right"
+                    title="Número de pessoas atingidas pela atividade (Público alvo).">
+                    <font-awesome-icon icon="fa-solid fa-circle-question" />
+                  </span>
+                </label>
                 <input type="number" class="input" placeholder="Qt Pessoas" v-model="educacao_det.participantes" />
               </div>
               <div class="field" v-if="tiragem">
                 <label class="label">Tiragem</label>
-                <input type="number" class="input" placeholder="Nº de exemplares produzidos" v-model="educacao_det.tiragem" />
+                <input type="number" class="input" placeholder="Nº de exemplares produzidos"
+                  v-model="educacao_det.tiragem" />
               </div>
             </div>
           </div>
@@ -68,13 +84,15 @@
               </div>
               <div class="columns">
                 <div class="column is-3 is-offset-2">
-                  <button class="button is-link submit-img is-fullwidth" @click="sendFotos" :disabled="inputImages.length == 0">
+                  <button class="button is-link submit-img is-fullwidth" @click="sendFotos"
+                    :disabled="inputImages.length == 0">
                     <span class="btico"><font-awesome-icon icon="fa-solid fa-check" /></span>
                     Enviar Imagens
                   </button>
                 </div>
                 <div class="column is-3 is-offset-2">
-                  <button class="button is-link cancel-img is-fullwidth" @click="clear" :disabled="inputImages.length == 0">
+                  <button class="button is-link cancel-img is-fullwidth" @click="clear"
+                    :disabled="inputImages.length == 0">
                     <span class="btico"><font-awesome-icon icon="fa-solid fa-broom" /></span>
                     Limpar Imagens
                   </button>
@@ -300,19 +318,19 @@ export default {
         setTimeout(() => (this.showMessage = false), 3000);
       }
     },
-    delFoto(idx){
-      educacaoService.delFoto(this.fotos[idx], this.educacao_det.id_educacao )
-          .then((response) => {
-            this.showMessage = true;
-            this.message = "Foto removida com sucesso!!";
-            this.type = "success";
-            this.caption = "Detalhamento";
-            setTimeout(() => (this.showMessage = false), 3000);
-            this.setTableData();
-          })
-          .catch((err) => {
-            console.log(err);
-          })
+    delFoto(idx) {
+      educacaoService.delFoto(this.fotos[idx], this.educacao_det.id_educacao)
+        .then((response) => {
+          this.showMessage = true;
+          this.message = "Foto removida com sucesso!!";
+          this.type = "success";
+          this.caption = "Detalhamento";
+          setTimeout(() => (this.showMessage = false), 3000);
+          this.setTableData();
+        })
+        .catch((err) => {
+          console.log(err);
+        })
     },
     getFoto() {
       this.fotos.forEach(element => {
@@ -329,7 +347,7 @@ export default {
       educacaoService.getDets(this.educacao_det.id_educacao)
         .then((response) => {
           this.dataTable = response.data;
-          if (response.data[0].fotos) {
+          if (response.data.length > 0) {
             this.fotos = response.data[0].fotos;
             this.getFoto();
           }

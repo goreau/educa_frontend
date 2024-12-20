@@ -69,7 +69,7 @@ export default {
                       ];
           break;
         case '3':
-          this.title = 'Resumo de Treinamentos';
+          this.title = 'Resumo de Capacitações';
           this.columns = [
                         { title: "Município", field: "municipio", type: "string" },
                         { title: "Programa", field: "programa", type: "string" },

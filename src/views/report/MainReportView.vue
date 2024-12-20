@@ -67,6 +67,26 @@
                         </div>
                       </div>
                     </div>
+                    <div class="columns" v-if="hasAtiv">
+                      <div class="column is-full">
+                        <div class="field">
+                          <label class="label">Atividade</label>
+                          <div class="control">
+                            <CmbAuxiliares @selAux="filter.id_atividade = $event" :tipo="1" :aux="0" :sel="filter.id_atividade" />
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="columns" v-if="hasTipo">
+                      <div class="column is-full">
+                        <div class="field">
+                          <label class="label">Tipo</label>
+                          <div class="control">
+                            <CmbAuxiliares @selAux="filter.tipo = $event" :tipo="7" :aux="0" :sel="filter.tipo" />
+                          </div>
+                        </div>
+                      </div>
+                    </div>
                     <div class="columns" v-if="hasData">
                       <div class="column is-half">
                         <label class="label">Início</label>
@@ -121,6 +141,7 @@ import CmbGeneric from "@/components/forms/CmbGeneric.vue";
 import moment from 'moment';
 import bulmaCalendar from 'bulma-calendar/dist/js/bulma-calendar.min.js';
 import "bulma-calendar/dist/css/bulma-calendar.min.css";
+import CmbAuxiliares from "@/components/forms/CmbAuxiliares.vue";
 
 export default {
   data() {
@@ -134,9 +155,13 @@ export default {
         dt_inicio: "",
         dt_final: "",
         id_programa: 0,
+        id_atividade: 0,
+        tipo: 0,
         id_prop: 0
       },
       hasData: false,
+      hasAtiv: false,
+      hasTipo: false,
       ini_date: '',
       fim_date: '',
       id_usuario: 0,
@@ -158,6 +183,7 @@ export default {
     Loader,
     CmbTerritorio,
     CmbPrograma,
+    CmbAuxiliares,
     CmbGeneric
   },
   methods: {
@@ -171,6 +197,20 @@ export default {
         this.$router.push(`/reportN/${this.tipo_relat}`);
       }
     },
+    showFilters(){
+      var dtarray = new Array('1','2','3','4','5','6','7','8');
+      var ativArray = new Array('3','4','5');
+      var tipoArray = new Array('4','5');
+      this.hasData = dtarray.indexOf(this.tipo_relat) != -1;
+      this.hasAtiv = ativArray.indexOf(this.tipo_relat) == -1;
+      this.hasTipo = tipoArray.indexOf(this.tipo_relat) == -1;
+      if (!this.hasAtiv){
+        this.filter.id_atividade = 0;
+      }
+      if (!this.hasTipo){
+        this.filter.tipo = 0;
+      }
+    }
   },
   mounted() {
     let cUser = this.currentUser;
@@ -244,15 +284,12 @@ export default {
   },
   created() {
     this.tipo_relat = this.$route.params.id;
-    var dtarray = new Array('1', '3', '4', '6', '7', '8');
-    this.hasData = dtarray.indexOf(this.tipo_relat) != -1;
-    console.log(this.hasData)
+    this.showFilters();
   },
   watch: {
     '$route'() {
       this.tipo_relat = this.$route.params.id;
-      var dtarray = new Array('1', '3', '4', '6', '7', '8');
-      this.hasData = dtarray.indexOf(this.tipo_relat) != -1;
+      this.showFilters();
     }
   },
 };
